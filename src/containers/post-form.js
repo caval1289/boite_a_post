@@ -9,7 +9,8 @@ import { browserHistory } from "react-router";
 const formConfig = {
     form: "createPostForm",
     fields: ["title", "content", "author"],
-    validate: validate
+    validate: validate,
+    initialValues: { author: "Moi" }
 }
 class PostForm extends Component {
     render() {

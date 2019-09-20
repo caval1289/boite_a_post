@@ -8,6 +8,10 @@ import { Link } from 'react-router';
 
 
 class PostList extends Component {
+    constructor(props) {
+        super(props)
+        this.state = { displayOnlyMines: false }
+    }
 
     componentWillMount() {
         this.props.readAllPost()
@@ -15,8 +19,14 @@ class PostList extends Component {
 
     renderPosts() {
         const { posts } = this.props
+        let arrayPosts;
         if (posts) {
-            return posts.map((post) => {
+            if (this.state.displayOnlyMines) {
+                arrayPosts = this.filterMyPosts(posts)
+            } else {
+                arrayPosts = posts;
+            }
+            return arrayPosts.map((post) => {
                 return <PostListItem key={post.id} post={post} deletePostCallBack={(post) => this.deletePostCallBack(post)} />
             })
         }
@@ -24,10 +34,20 @@ class PostList extends Component {
     deletePostCallBack(post) {
         this.props.deletePost(post.id)
     }
+    filterMyPosts(postList) {
+        return postList.filter((post) => {
+            if (post.author == "Moi") {
+                return true;
+            } else {
+                false;
+            }
+        });
+    }
     render() {
         return (
             <div>
                 <h1>Liste des posts</h1>
+                <input type="checkbox" onChange={(e) => this.setState({ displayOnlyMines: e.target.checked })} />Afficher uniquement mes posts
                 <div className="button_add">
                     <Link to={'create-post'}>
                         <button className="btn btn-primary btn-circle btn-lg">+</button>
